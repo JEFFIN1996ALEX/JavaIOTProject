@@ -1,6 +1,6 @@
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.sun.javafx.font.PrismFontFactory;
+//import com.sun.javafx.font.PrismFontFactory;
 
 
 import java.io.*;
@@ -11,41 +11,57 @@ import java.net.Socket;
 public class ServerTransport {
 
     private static Socket socket;
+    public ServerSocket serverSocket;
+    public String number;
+    public String returnMessage;
+    ;
 
-    public ServerTransport() {
+    public String receiveMessage() {
         int port = 25000;
-        ServerSocket serverSocket = new ServerSocket(port);
-        System.out.println("Server Started and listening to the port 25000");
-    }
-
-       try {
-       while(true)
+        try {
+            serverSocket = new ServerSocket(port);
+            System.out.println("Server Started and listening to the port 25000");
+            while (true)
 
             {
                 //Reading the message from the client
                 socket = serverSocket.accept();
-                System.out.println("Server Started and listening to the port 25000");
-
-       }
-       }
-         catch (JsonGenerationException e) {
+                InputStream is = socket.getInputStream();
+                InputStreamReader isr = new InputStreamReader(is);
+                BufferedReader br = new BufferedReader(isr);
+                number = br.readLine();
+            }
+        } catch (JsonGenerationException e) {
             e.printStackTrace();
         } catch (JsonMappingException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                socket.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        return receiveMessage();
+    }
 
-        finally {
-           try {
-               socket.close();
-           } catch (Exception e) {
-           }
+
+    public String sendMessage() {
+
+        while (true) {
+            OutputStream os = null;
+            try {
+                os = socket.getOutputStream();
+                OutputStreamWriter osw = new OutputStreamWriter(os);
+                BufferedWriter bw = new BufferedWriter(osw);
+                bw.write(returnMessage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-       }
     }
 }
