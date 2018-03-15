@@ -19,12 +19,13 @@ public class server
     {
         Check check = new Check(2,"server","ASUS2");
         ServerTransport serverTransport = new ServerTransport();
+        serverTransport.StartSocket();
         try
         {
-            //ServerTransport serverTransport = new ServerTransport();
-            int port = 25000;
-            ServerSocket serverSocket =  new ServerSocket(port);
-            System.out.println("Server Started and listening to the port 25000");
+//            ServerTransport serverTransport = new ServerTransport();
+//            int port = 25000;
+//            ServerSocket serverSocket =  new ServerSocket(port);
+//            System.out.println("Server Started and listening to the port 25000");
             ObjectMapper mapper2 = new ObjectMapper();
             mapper2.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
             //Server is running always. This is done using this while(true) loop
@@ -41,9 +42,11 @@ public class server
                // String number = null;
                // System.out.println("Message received from client is "+ number.receiveMessage());
 
-                serverTransport.receiveMessage();
-                ObjectMapper mapper4 = new ObjectMapper();
-                mapper4.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+
+
+//                serverTransport.receiveMessage();
+//                ObjectMapper mapper4 = new ObjectMapper();
+//                mapper4.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
                 Check check2 = mapper2.readValue(serverTransport.receiveMessage(), Check.class);
                 System.out.println("The POJO of the message received from the client is : "+check2);
                 System.out.println("************************************************");
@@ -76,13 +79,14 @@ public class server
                 }
 
                 //Sending the response back to the client.
-                OutputStream os = socket.getOutputStream();
-                OutputStreamWriter osw = new OutputStreamWriter(os);
-                BufferedWriter bw = new BufferedWriter(osw);
-                bw.write(returnMessage);
-                System.out.println("Message sent to the client is "+returnMessage);
-                bw.flush();
-                System.out.println("************************************************");
+//                OutputStream os = socket.getOutputStream();
+//                OutputStreamWriter osw = new OutputStreamWriter(os);
+//                BufferedWriter bw = new BufferedWriter(osw);
+//                bw.write(returnMessage);
+//                bw.flush();
+                ServerTransport.sendMessage(returnMessage);
+//                System.out.println("Message sent to the client is "+returnMessage);
+//                System.out.println("************************************************");
             }
 
         }
@@ -100,9 +104,10 @@ public class server
 
         finally
         {
+            serverTransport.StopSocket();
             try
             {
-                socket.close();
+//                socket.close();
             }
             catch(Exception e){}
         }
