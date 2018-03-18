@@ -17,43 +17,46 @@ public class Client
     public static void main(String args[])
     {
         Check check = new Check(1, "Client", "ASUS1");
-
+        ClientTransport clientTransport = new ClientTransport();
         try
         {
-            String host = "localhost";
+            /*String host = "localhost";
             int port = 25000;
             InetAddress address = InetAddress.getByName(host);
             socket = new Socket(address, port);
             //  String json = mapper.writeValueAsString(emp);
 
             //Send the message to the server
-            OutputStream os = socket.getOutputStream();
+           /* OutputStream os = socket.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(os);
-            BufferedWriter bw = new BufferedWriter(osw);
+            BufferedWriter bw = new BufferedWriter(osw);*/
 
             ObjectMapper mapper = new ObjectMapper();
             mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
             String number = mapper.writeValueAsString(check);
 
-            String sendMessage = number + "\n";
+
+           /* String sendMessage = number + "\n";
             bw.write(sendMessage);
             bw.flush();
             System.out.println("Message sent to the server : "+sendMessage);
-            System.out.println("************************************************");
+            System.out.println("************************************************");*/
+            clientTransport.SendToServer(number);
 
             //Get the return message from the server
-            InputStream is = socket.getInputStream();
+           /* InputStream is = socket.getInputStream();
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);
             String message = br.readLine();
             System.out.println("Message received from the server : " +message);
             System.out.println("************************************************");
-            String receivedJson = message;
+            String receivedJson = message;*/
             // System.out.println(receivedJson);
+
 
             ObjectMapper mapper2 = new ObjectMapper();
             mapper2.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-
+            String receivedJson = clientTransport.RcvFromServer();
             Check check1 = mapper2.readValue(receivedJson, Check.class);
 
             //  System.out.println(String.valueOf(receivedJson));
@@ -77,7 +80,7 @@ public class Client
             //Closing the socket
             try
             {
-                socket.close();
+                clientTransport.StopSocket();
             }
             catch(Exception e)
             {
