@@ -56,8 +56,8 @@ public class Client
 
             ObjectMapper mapper2 = new ObjectMapper();
             mapper2.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-            String receivedJson = clientTransport.RcvFromServer();
-            Check check1 = mapper2.readValue(receivedJson, Check.class);
+//            String receivedJson = clientTransport.RcvFromServer();
+            Check check1 = mapper2.readValue(clientTransport.RcvFromServer(), Check.class);
 
             //  System.out.println(String.valueOf(receivedJson));
             System.out.println("The POJO of the message from server is : "+String.valueOf(check1));
