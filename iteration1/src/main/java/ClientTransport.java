@@ -47,18 +47,19 @@ public class ClientTransport {
     public String RcvFromServer(){
 
         InputStream is = null;
+        String message = null;
         try {
 
             is = socket.getInputStream();
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);
-            String message = br.readLine();
+            message = br.readLine();
             System.out.println("Message received from the server : " +message);
             System.out.println("************************************************");
            // receivedJson = message;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return message;
     }
 }
