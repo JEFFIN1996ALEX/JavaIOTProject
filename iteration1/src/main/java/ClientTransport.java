@@ -1,20 +1,17 @@
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 //import com.sun.javafx.font.PrismFontFactory;
 
 import java.io.*;
-import java.net.ConnectException;
-import java.net.InetAddress;
+        import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 
 public class ClientTransport {
     private static Socket socket;
-    
-    public void SendToServer(){
-        
-    
+
+    public void SendToServer(String number){
+
+
         try {
             String host = "localhost";
             int port = 25000;
@@ -26,7 +23,7 @@ public class ClientTransport {
             OutputStream os = socket.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(os);
             BufferedWriter bw = new BufferedWriter(osw);
-            String sendMessage = .number + "\n";
+            String sendMessage = number + "\n";
             bw.write(sendMessage);
             System.out.println("Message sent to the server : "+sendMessage);
             bw.flush();
@@ -37,5 +34,31 @@ public class ClientTransport {
             e.printStackTrace();
         }
     }
-    
+
+    public void StopSocket()
+    {
+        try {
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String RcvFromServer(){
+
+        InputStream is = null;
+        try {
+
+            is = socket.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            String message = br.readLine();
+            System.out.println("Message received from the server : " +message);
+            System.out.println("************************************************");
+           // receivedJson = message;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
